@@ -4,14 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EscapeNest | Great Stays</title>
+    <style>
+        form{
+            display:inline-block;
+        }
+    </style>
 </head>
 <body>
     <h3>All Listings</h3>
+    <a style="text-decoration:none" href="/listings/new">Create New Lisiting</a>
     <ul>
     <%for(item of data){%>
-        <!-- <img src="<%=item.image%>" alt="hotel image"> -->
-         <li><a href="http://localhost:8000/listings/<%=item._id%>"><%=item.title%></a></li>
-    
+        <!-- <img src="item.image" alt="hotel image"> -->
+         <li><a href="/listings/<%=item._id%>"><%=item.title%></a>&nbsp;
+            <button class="view" onclick="window.location.href='/listings/<%=item._id%>'">View</button>&nbsp;
+            <button class="edit" onclick="window.location.href='/listings/edit/<%=item._id%>'">Edit</button>&nbsp;
+            <form method="post" action="/listings/<%=item._id%>?_method=DELETE"><button class="delete" >Delete</button></form>
+        </li>
+         <br><br>
     <%}%>
     </ul>
 </body>

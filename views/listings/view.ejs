@@ -8,11 +8,23 @@
         h2{
             display:inline-block;
         }
+        img{
+            width:400px;
+        }
     </style>
 </head>
 <body>
-   <h2> Title:</h2>  <%=data.title%>
-    
+    <img src="<%=data.image%>" alt="hotel Image">
+   <ul>
+    <li>Title: <%=data.title%></li>
+    <li>Description: <%=data.description%></li>
+    <li>Price: &#x20B9;<%=data.price.toLocaleString("en-IN")%></li>
+    <li>Location: <%=data.location%></li>
+    <li>Country: <%=data.country%></li>
+   </ul>
+   <button onclick="window.location.href='/listings/edit/<%=data._id%>'">Edit</button> 
+   <button>Delete</button>
+   <button onclick="window.location.href='/listings'">Go Back</button>
    
 </body>
 </html>
