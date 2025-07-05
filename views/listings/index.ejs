@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EscapeNest | Great Stays</title>
+</head>
+<body>
+    <h3>All Listings</h3>
+    <ul>
+    <%for(item of data){%>
+        <!-- <img src="<%=item.image%>" alt="hotel image"> -->
+         <li><a href="http://localhost:8000/listings/<%=item._id%>"><%=item.title%></a></li>
+    
+    <%}%>
+    </ul>
+</body>
+</html>
