@@ -3,7 +3,8 @@ import path from "node:path";
 import { fileURLToPath } from 'url';
 import mongoose from "mongoose";
 import methodOverride from "method-override";
-import {Listing} from "./models/listing.js"
+import {Listing} from "./models/listing.js";
+import ejsMate from "ejs-mate";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,13 +12,16 @@ const __dirname = path.dirname(__filename);
 const app=express();
 const port= 8000;
 
+app.engine("ejs",ejsMate);
+
 app.set("view engine","ejs");
-app.set("views",path.join(__dirname,"views/listings"));
+app.set("views",path.join(__dirname,"views"));
 // app.set("views",path.join(__dirname,"views/listings"));
 
 
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
+app.use(express.static(path.join(__dirname,"/public")));
 
 //Connection to MongoDB
 await mongoose.connect('mongodb://127.0.0.1/EscapeNest')
@@ -30,20 +34,20 @@ await mongoose.connect('mongodb://127.0.0.1/EscapeNest')
 
 
 app.get("/",(req,res)=>{
-    res.render("home.ejs");
+    res.render("listings/home.ejs");
 })
 
 //index route - DEFAULT
 app.get("/listings",(req,res)=>{
     Listing.find({}).then((response)=>{
         //console.log(response);
-        res.render("index.ejs",{data:response});
+        res.render("listings/index.ejs",{data:response});
     })
     
 })
 
 app.get("/listings/new",(req,res)=>{
-    res.render("new.ejs");
+    res.render("listings/new.ejs");
 })
 
 //Create NEW Listing
@@ -67,7 +71,7 @@ app.post("/listings/new",async (req,res)=>{
 app.get("/listings/:id", async(req,res)=>{
     let {id} = req.params;
     await Listing.findById(id).then((response)=>{
-        res.render("view.ejs",{data:response});
+        res.render("listings/view.ejs",{data:response});
     })
 })
 
@@ -76,7 +80,7 @@ app.get("/listings/edit/:id",async (req,res)=>{
     let {id}=req.params;
     await Listing.findById(id).then((response)=>{
         // console.log(response);
-        res.render("edit.ejs",{data:response});
+        res.render("listings/edit.ejs",{data:response});
     })
     
 })

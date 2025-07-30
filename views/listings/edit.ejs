@@ -1,32 +1,55 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%=data.title%></title>
-    <style>
-        img{
-            width: 500px;
-        }
-    </style>
-</head>
+    <title></title>
+</head> -->
+<%-layout("/layouts/boilerplate")%>
 <body>
-    <h2>Edit the Listing:</h2>
-    <img src="<%=data.image%>" alt="hotel image"><br><br>
-    <form method="post" action="/listings/edit/<%=data._id%>?_method=PATCH">
-        <label for="title">Title:</label>
-        <input id="title" name="title" value="<%=data.title%>" type="text"><br><br>
-        <label for="description">Description:</label>
-        <textarea rows="3" cols="100" name="description" id="description"><%=data.description%></textarea><br><br>
-        <label for="image">Image Link:</label>
-        <textarea rows="3" cols="90" name="image" id="image"><%=data.image%></textarea><br><br>
-        <label for="price">Price:</label>
-        <input type="number" id="price" value="<%=data.price%>" name="price"><br><br>
-        <label for="location">Location:</label>
-        <input type="text" id="location" value="<%=data.location%>" name="location"><br><br>
-        <label for="country">Country:</label>
-        <input type="text" id="country" value="<%=data.country%>" name="country"><br><br>
-        <button>Submit</button>
-    </form>
+    <div class="row">
+        <div class="col-8">
+        <h3 class="m-3">Edit the Listing:</h3>
+        </div>
+        <div class="col-6 offset-3">
+            <img class="m-3 img-fluid edit-img" src="<%=data.image%>" alt="hotel image">
+        </div>
+        
+        <div class="col-8 offset-2">
+            <form method="post" action="/listings/edit/<%=data._id%>?_method=PATCH">
+                <div class="m-3">
+                    <label for="title" class="form-label">Title:</label>
+                    <input id="title" class="form-control" name="title" value="<%=data.title%>" type="text">
+                </div>
+                <div class="m-3">
+                    <label for="description" class="form-label">Description:</label>
+                    <textarea rows="3" cols="100" name="description" id="description" class="form-control"><%=data.description%></textarea>
+                </div>
+                <div class="m-3">
+                    <label for="image" class="form-label">Image Link:</label>
+                    <textarea rows="3" cols="90" name="image" id="image" class="form-control"><%=data.image%></textarea>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="m-3">
+                            <label for="price" class="form-label">Price:</label>
+                            <input type="number" id="price" class="form-control" value="<%=data.price%>" name="price">
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="m-3">
+                            <label for="location" class="form-label">Location:</label>
+                            <input type="text" id="location" class="form-control" value="<%=data.location%>" name="location">
+                        </div>
+                    </div>
+                </div>
+                <div class="m-3">
+                    <label for="country" class="form-label">Country:</label>
+                    <input type="text" id="country" class="form-control" value="<%=data.country%>" name="country">
+                </div>
+                <button class="btn m-3 btn-outline editpage-button">Submit</button>
+            </form>
+        </div>
+    </div>
 </body>
-</html>
+<!-- </html> -->

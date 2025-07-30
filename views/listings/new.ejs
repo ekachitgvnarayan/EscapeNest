@@ -1,27 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create New Listing</title>
-</head>
+<%-layout("/layouts/boilerplate")%>
 <body>
-    <h2>Create New Listing:</h2>
-    <form method="post" action="/listings/new">
-        <label for="title">Title:</label>
-        <input id="title" name="title" type="text"><br><br>
-        <label for="description">Description:</label>
-        <input id="description" name="description" type="text"><br><br>
-        <label for="image">Image Link:</label>
-        <!-- <input type="text" id="image" name="image"> -->
-        <textarea rows="3" cols="50" name="image" id="image"></textarea><br><br>
-        <label for="price">Price:</label>
-        <input type="number" id="price" name="price"><br><br>
-        <label for="location">Location:</label>
-        <input type="text" id="location" name="location"><br><br>
-        <label for="country">Country:</label>
-        <input type="text" id="country" name="country"><br><br>
-        <button>Submit</button>
-    </form>
+
+    <h3 class="m-3">Create New Listing:</h3>
+        <div class="col-8 offset-1">
+            <form method="post" action="/listings/new">
+                <div class="m-3">
+                    <label for="title" class="form-label">Title:</label>
+                    <input id="title" placeholder="Enter A Catchy Title" class="form-control" name="title" type="text">
+                </div>
+                <div class="m-3">
+                    <label for="description" class="form-label">Description:</label>
+                    <textarea id="description" placeholder="Describe your hotel briefly..." class="form-control" name="description" type="text"></textarea>
+                </div>
+                <div class="m-3">
+                    <label for="image" class="form-label">Image Link:</label>
+                    <input  name="image" placeholder="Paste the image Link here" id="image" class="form-control"></input>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="m-3">
+                            <label for="price" class="form-label">Price:</label>
+                            <input type="number" id="price" placeholder="Price Here" class="form-control" name="price">
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="m-3">
+                            <label for="location" class="form-label">Location:</label>
+                            <input type="text" id="location" placeholder="Enter the Location" class="form-control" name="location">
+                        </div>
+                    </div>
+                </div>
+                <div class="m-3">
+                    <label for="country" class="form-label">Country:</label>
+                    <input type="text" id="country" placeholder="Enter the Country" class="form-control" name="country">
+                </div>
+                <button class="btn m-3 btn-outline newpage-button">Add</button>
+            </form>
+        </div>
 </body>
-</html>
