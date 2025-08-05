@@ -1,0 +1,14 @@
+<%-layout("/layouts/boilerplate")%>
+<body class="error-page1">
+  <div class="container error-container">
+    <img src="/icons/route-solid.svg" alt="EscapeNest Logo" class="logo" />
+    <div class="error-code"><%=status%></div>
+    <div class="error-message"><%=message%></div>
+    <div class="error-subtext">
+      <!-- The page you're looking for doesn't exist or has been moved. -->
+       <%=msgdata%>
+    </div>
+    <a href="/listings" class="btn btn-home">Back to Home</a>
+  </div>
+
+</body>

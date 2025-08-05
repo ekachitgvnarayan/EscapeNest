@@ -16,36 +16,54 @@
         </div>
         
         <div class="col-8 offset-2">
-            <form method="post" action="/listings/edit/<%=data._id%>?_method=PATCH">
+            <form method="post" action="/listings/edit/<%=data._id%>?_method=PATCH" class="needs-validation" novalidate>
                 <div class="m-3">
                     <label for="title" class="form-label">Title:</label>
-                    <input id="title" class="form-control" name="title" value="<%=data.title%>" type="text">
+                    <input id="title" class="form-control" name="title" value="<%=data.title%>" type="text" required>
+                    <div class="invalid-feedback">
+                        Please choose a Title.
+                    </div>
                 </div>
                 <div class="m-3">
                     <label for="description" class="form-label">Description:</label>
-                    <textarea rows="3" cols="100" name="description" id="description" class="form-control"><%=data.description%></textarea>
+                    <textarea rows="3" cols="100" name="description" id="description" class="form-control" required><%=data.description%></textarea>
+                    <div class="invalid-feedback">
+                        Description should be of valid length
+                    </div>
                 </div>
                 <div class="m-3">
                     <label for="image" class="form-label">Image Link:</label>
-                    <textarea rows="3" cols="90" name="image" id="image" class="form-control"><%=data.image%></textarea>
+                    <textarea rows="3" cols="90" name="image" id="image" class="form-control" required><%=data.image%></textarea>
+                    <div class="invalid-feedback">
+                        Image link should be valid
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="m-3">
                             <label for="price" class="form-label">Price:</label>
-                            <input type="number" id="price" class="form-control" value="<%=data.price%>" name="price">
+                            <input id="price" class="form-control" value="<%=data.price%>" name="price" required>
+                            <div class="invalid-feedback">
+                                Price should not be empty
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-8">
                         <div class="m-3">
                             <label for="location" class="form-label">Location:</label>
-                            <input type="text" id="location" class="form-control" value="<%=data.location%>" name="location">
+                            <input type="text" id="location" class="form-control" value="<%=data.location%>" name="location" required>
+                            <div class="invalid-feedback">
+                                Enter a valid Location
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="m-3">
                     <label for="country" class="form-label">Country:</label>
-                    <input type="text" id="country" class="form-control" value="<%=data.country%>" name="country">
+                    <input type="text" id="country" class="form-control" value="<%=data.country%>" name="country" required>
+                    <div class="invalid-feedback">
+                        Enter a valid Country
+                    </div>
                 </div>
                 <button class="btn m-3 btn-outline editpage-button">Submit</button>
             </form>

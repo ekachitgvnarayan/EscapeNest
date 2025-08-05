@@ -28,6 +28,19 @@ footer .footer{
     height:8rem;
     align-items:center;
 }
+
+.footer a{
+    color: #777;
+}
+
+.footer a:hover{
+    color: Black;
+}
+
+
+.footer-icons a{
+    margin: 0 8px;
+}
 .footer .footer-icons,
 .footer .footer-copyright,
 .footer .footer-privacy{
@@ -57,7 +70,6 @@ footer .footer{
     object-fit:cover;
 }
 .index-cards .card-body{
-
     padding:0 !important;
 }
 /*  <weight>: Use a value from 200 to 800
@@ -103,4 +115,43 @@ footer .footer{
     border-radius:20px;
     height:40vh;
     object-fit:cover;
+}
+
+
+
+
+.error-page1 .error-container {
+  text-align: center;
+  padding: 80px 20px;
+}
+.error-page1 .error-code {
+  font-size: 120px;
+  font-weight: 700;
+  color: #ff4c29;
+}
+.error-page1 .error-message {
+  font-size: 24px;
+  margin-top: 10px;
+  color: #333;
+}
+.error-page1 .error-subtext {
+  font-size: 16px;
+  margin-top: 10px;
+  color: #666;
+}
+.error-page1 .btn-home {
+  margin-top: 30px;
+  background-color: #ff3300;
+  color: #fff;
+  padding: 10px 30px;
+  font-size: 16px;
+  border-radius: 30px;
+}
+.error-page1 .btn-home:hover {
+  background-color: #cc2900;
+}
+
+.error-page1 .logo {
+  max-width: 60px;
+  margin-bottom: 20px;
 }

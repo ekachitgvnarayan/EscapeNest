@@ -10,11 +10,11 @@ const listingSchema = new mongoose.Schema({
         maxLength:1000
     },
     image:{
-        type:String,
-        required:true
+        type:String
     },
     price:{
         type:Number,
+        min:1,
         required:true
     },
     location:{
