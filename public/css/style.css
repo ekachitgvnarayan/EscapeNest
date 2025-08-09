@@ -99,11 +99,11 @@ footer .footer{
     background-color:#fe2001;
     color:white;
 }
-.editpage-button, .home-btn{
+.editpage-button, .home-btn,.submit-comment-button{
     background-color:#fe2001;
     color:white;
 }
-.newpage-button:hover,.editpage-button:hover, .home-btn:hover{
+.submit-comment-button:hover, .newpage-button:hover,.editpage-button:hover, .home-btn:hover{
     color:#fe2001;
 }
 .view-card{
