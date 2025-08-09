@@ -9,14 +9,14 @@
 <body>
     <div class="row">
         <div class="col-8 offset-3">
-            <h3 class="mb-3 mt-3">Listing Details</h3>
+            <h3 class="mb-3 mt-3"><%=data.title%></h3>
         </div>
         <div class="col-6 offset-3">
             <div class="card view-card">
                 <img  class="card-img show-img" src="<%=data.image%>" alt="hotel Image">
                 <div class="card-body">
                     <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p> -->
-                    <h5 class="card-title"><%=data.title%></h5>
+                    <!-- <h5 class="card-title"><%=data.title%></h5> -->
                     <p class="card-text"><%=data.description%></p>
                     <ul>
                         <li>Price: &#x20B9;<%=data.price.toLocaleString("en-IN")%></li>
@@ -29,6 +29,52 @@
                     </form>
                 </div>
                 <!-- <button onclick="window.location.href='/listings/edit/<%=data._id%>'">Edit</button>  -->
+            </div>
+        </div>
+        
+        <div class="col-8 offset-1 mt-3 mb-3 rating-div">
+            <h4 class=" mb-3">Leave a review:</h4>
+            <form action="/listings/<%=data._id%>/reviews" method="post" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label for="rating" class="form-label">Give a Rating: </label><br>
+                    &#11088;<output for="rating" id="rangeValue" aria-hidden="true"></output>&#11088;<br><br>
+                    <input type="range" class="form-range" min="1" max="5"  id="rating" name="review[rating]"><br>
+                </div>
+                <div class="mb-3">
+                    <label for="comment" class="form-label">Comments:</label>
+                    <textarea name="review[comment]" class="form-control" 
+                    id="comment" placeholder="Enter the comment here..." required></textarea>
+                    <div class="invalid-feedback">
+                        Enter a valid Comment!
+                    </div>
+                </div>
+                <button class="btn btn-outline-dark mb-3">Submit</button>
+            </form>
+        </div>
+        <div clas="col-8 offset-3 mt-3 mb-3">
+            <h4 class="offset-1" >All Reviews:</h4>
+            <div class="comment-section-div mb-3">
+                <% for(review of data.reviews){%>
+                <div class="card col-3 m-3">
+                    <div class="card-header">
+                        <%=review.rating%>&#11088;
+                    </div>
+                    <div class="card-body">
+                        <figure>
+                        <blockquote class="blockquote">
+                            <p><%= review.comment%></p>
+                        </blockquote>
+                        <figcaption class="blockquote-footer">
+                            Posted on <cite ><%=review.createdAt.toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric',hour: '2-digit', minute: '2-digit', hour12: true })%></cite>
+                        </figcaption>
+                        </figure>
+                        <form method="post" action="/listings/<%=data._id%>/reviews/<%=review._id%>?_method=DELETE">
+                            <button class="btn btn-outline-dark btn-sm">Delete</button>
+                        </form>
+                        
+                    </div>
+                </div>
+                <%}%>
             </div>
         </div>
     </div>

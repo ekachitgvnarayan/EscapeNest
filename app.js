@@ -4,11 +4,12 @@ import { fileURLToPath } from 'url';
 import mongoose from "mongoose";
 import methodOverride from "method-override";
 import {Listing} from "./models/listing.js";
+import {Review} from "./models/review.js";
 import ejsMate from "ejs-mate";
 import {asyncWrap} from "./utils/asyncWrap.js";
 import {ExpressError} from "./utils/ExpressError.js";
 import {ListingSchema} from "./listingSchema.js";
-import {joiValidate} from "./utils/joiValidate.js";
+import {joiValidateListing, joiValidateReview} from "./utils/joiValidate.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -42,7 +43,7 @@ app.get("/listings/new",(req,res)=>{
 })
 
 //Create NEW Listing
-app.post("/listings/new",joiValidate,asyncWrap(async (req,res,next)=>{
+app.post("/listings/new",joiValidateListing,asyncWrap(async (req,res,next)=>{
 //     if (req.body.image === "") {
 //     delete req.body.image; // to trigger Mongoose's default
 //   }
@@ -67,10 +68,11 @@ app.get("/listings/:id", asyncWrap(async(req,res,next)=>{
     if(!mongoose.Types.ObjectId.isValid(id)){
         throw new ExpressError(400,"400 Bad Request");
     }
-    const response=await Listing.findById(id);
+    const response=await Listing.findById(id).populate("reviews");
     if (!response) {
         throw new ExpressError(404, "Listing not found in the Database");
     }
+    console.log(response);
     res.render("listings/view.ejs",{data:response});
 }))
 
@@ -111,6 +113,32 @@ app.delete("/listings/:id",async (req,res,next)=>{
         console.log(response);
         res.redirect("/listings");
     })
+})
+
+app.post("/listings/:id/reviews",joiValidateReview,asyncWrap(async (req,res,next)=>{
+    console.log("working post req");
+    const {id} = req.params;
+    // console.log(id);
+    const {review} = req.body;
+    const reviewUpdate = await Review.insertOne({
+        comment:review.comment,
+        rating:review.rating
+    });
+    const review_id = reviewUpdate._id;
+    console.log(reviewUpdate.createdAt);
+    // console.log(review_id);
+    const x = await Listing.findByIdAndUpdate(id,  {$push:{reviews:{$each:[review_id]}}}  ,{new:true}).populate("reviews");
+     console.log(x);
+     res.redirect(`/listings/${id}`);
+}))
+
+app.delete("/listings/:id/reviews/:reviewId",async(req,res,next)=>{
+    let {id, reviewId} = req.params;
+    const delReview = await Review.findByIdAndDelete(reviewId);
+    console.log(delReview);
+    const delFromArray = await Listing.findByIdAndUpdate(id, {$pull:{reviews:reviewId}})
+    console.log(delFromArray);
+    res.redirect(`/listings/${id}`);
 })
 
 app.use((req,res,next)=>{
