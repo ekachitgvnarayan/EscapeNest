@@ -1,5 +1,4 @@
 import express from "express";
-const router =express.Router();
 import mongoose from "mongoose";
 import {Listing} from "../models/listing.js";
 import {asyncWrap} from "../utils/asyncWrap.js";
@@ -7,6 +6,7 @@ import {ListingSchema} from "../listingSchema.js";
 import {joiValidateListing} from "../utils/joiValidate.js";
 import {ExpressError} from "../utils/ExpressError.js";
 
+const router =express.Router();
 
 //index route - DEFAULT
 router.get("/",asyncWrap(async(req,res,next)=>{
@@ -33,6 +33,8 @@ router.post("/new",joiValidateListing,asyncWrap(async (req,res,next)=>{
         price:data.price,
         location:data.location,
         country:data.country
+    }).then((response)=>{
+        req.flash("regSuccess","Listing Registered Succesfully");
     })
     res.redirect("/listings");
 }
@@ -46,6 +48,7 @@ router.get("/:id", asyncWrap(async(req,res,next)=>{
     }
     const response=await Listing.findById(id).populate("reviews");
     if (!response) {
+        // req.flash("failureMsg","Listing Not Found");
         throw new ExpressError(404, "Listing not found in the Database");
     }
     res.render("listings/view.ejs",{data:response});
@@ -61,7 +64,7 @@ router.get("/edit/:id",asyncWrap(async (req,res,next)=>{
 }))
 
 //Update Route
-router.patch("/edit/:id",async (req,res,next)=>{
+router.patch("/edit/:id",asyncWrap(async (req,res,next)=>{
     let {id}=req.params;
     let data=req.body;
     console.log("Printing from Patch route : req.body :- ");
@@ -74,20 +77,22 @@ router.patch("/edit/:id",async (req,res,next)=>{
     .then((response)=>{
         console.log("Updated Data:");
         console.log(response);
+        req.flash("regSuccess","Listing Updated Succesfully");
         res.redirect(`/listings/${id}`);
     })
-})
+}))
 
 //Delete Route
-router.delete("/:id",async (req,res,next)=>{
+router.delete("/:id",asyncWrap(async (req,res,next)=>{
     let {id}=req.params;
     console.log("Printing from Delete route : deleted id:- ");
     console.log(id);
     await Listing.findByIdAndDelete(id)
     .then((response)=>{
         console.log(response);
+        req.flash("regSuccess","Listing Deleted Succesfully");
         res.redirect("/listings");
     })
-})
+}))
 
 export {router};

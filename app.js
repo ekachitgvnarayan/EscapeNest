@@ -6,6 +6,8 @@ import methodOverride from "method-override";
 import {ExpressError} from "./utils/ExpressError.js";
 import ejsMate from "ejs-mate";
 import cookieParser from "cookie-parser";
+import session from "express-session";
+import flash from "connect-flash";
 /* import {Listing} from "./models/listing.js";
 import {Review} from "./models/review.js";
 import {asyncWrap} from "./utils/asyncWrap.js";
@@ -33,6 +35,28 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname,"/public")));
 app.use(cookieParser());
 
+//session option for session middleware
+const sessionOptions={
+    secret:"mysecretstring",
+    resave:false,
+    saveUninitialized:true,
+    cookie:{
+        expires:Date.now()+7*24*60*60*1000,
+        maxAge:7*24*60*60*1000,
+        httpOnly:true
+    }
+}
+
+app.use(session(sessionOptions));
+app.use(flash());
+
+//flash middleware
+app.use((req,res,next)=>{
+    res.locals.regSuccess=req.flash("regSuccess");
+    res.locals.failure=req.flash("failureMsg");
+    next()
+})
+
 app.get("/",(req,res)=>{
     res.render("listings/home.ejs");
 })
@@ -40,10 +64,10 @@ app.get("/",(req,res)=>{
 app.use("/listings",listings);
 app.use("/listings/:id/reviews",reviews);
 
-//Oops! Page Not Found
+/* //Oops! Page Not Found
 app.use((req,res,next)=>{
     next(new ExpressError(404,"Oops! Page Not Found"));
-})
+}) */
 
 //custom error handler
 app.use((err,req,res,next)=>{

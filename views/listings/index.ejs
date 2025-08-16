@@ -1,35 +1,16 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EscapeNest | Great Stays</title>
-    <style>
-        form{
-            display:inline-block;
-        }
-    </style>
-</head> -->
 <%-layout("/layouts/boilerplate")%>
 <body>
-    <!-- <h1>EscapeNest | Great Stays</h1> -->
+    
     <h3>All Listings</h3>
     <div class="index-listings-div">
         <%for(item of data){%>
             <a href="/listings/<%=item._id%>" class="listing-link">
-            <!-- <img src="item.image" alt="hotel image"> -->
         <div class="card index-cards">
             <img src="<%= item.image%>" class="card-img-top" alt="...">
             <div class="card-img-overlay"></div>
             <div class="card-body">
                 <h5 class="card-title"><%=item.title%></h5>
                 <p class="card-text">&#x20B9;<%=item.price.toLocaleString("en-IN")%> / Night</p>
-                <!-- <a href="/listings/<%=item._id%>" class="btn btn-info">View</a>  -->
-                <!-- <a href="/listings/edit/<%=item._id%>" class="btn btn-info">Edit</a> -->
-                
-                <!-- <form style="display:inline-block" method="post" action="/listings/<%=item._id%>?_method=DELETE">
-                    <button class="btn btn-info delete" >Delete</button>
-                </form> -->
             </div>
         </div>
             <br><br>
@@ -37,9 +18,3 @@
         <%}%>
     </div>
 </body>
-<!-- </html> -->
- <!-- <li><a href="/listings/<%=item._id%>"><%=item.title%></a>&nbsp;
-            <button class="view" onclick="window.location.href='/listings/<%=item._id%>'">View</button>&nbsp;
-            <button class="edit" onclick="window.location.href='/listings/edit/<%=item._id%>'">Edit</button>&nbsp;
-            <form method="post" action="/listings/<%=item._id%>?_method=DELETE"><button class="delete" >Delete</button></form>
-        </li> -->

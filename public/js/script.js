@@ -18,7 +18,8 @@
   })
 })();
 
-// This is an example script, please modify as needed
+if(document.getElementById('rating')){
+  // This is an example script, please modify as needed
   const rangeInput = document.getElementById('rating');
   const rangeOutput = document.getElementById('rangeValue');
 
@@ -28,3 +29,4 @@
   rangeInput.addEventListener('input', function() {
     rangeOutput.textContent = this.value;
   });
+}

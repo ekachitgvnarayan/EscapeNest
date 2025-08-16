@@ -1,0 +1,15 @@
+<%if(regSuccess && regSuccess.length){%>
+    <br>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Congratulations!</strong> <%=regSuccess%>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<%}%>
+
+<%if(failure && failure.length){%>
+    <br>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Congratulations!</strong> <%=failure%>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<%}%>

@@ -6,7 +6,7 @@ import {joiValidateReview} from "../utils/joiValidate.js";
 import {Listing} from "../models/listing.js";
 import {Review} from "../models/review.js";
 
-
+//Add new review and update Listing with the review's id
 router.post("/",joiValidateReview,asyncWrap(async (req,res,next)=>{
     console.log("working post req");
     const {id} = req.params;
@@ -19,18 +19,21 @@ router.post("/",joiValidateReview,asyncWrap(async (req,res,next)=>{
     const review_id = reviewUpdate._id;
     console.log(reviewUpdate.createdAt);
     // console.log(review_id);
-    const x = await Listing.findByIdAndUpdate(id,  {$push:{reviews:{$each:[review_id]}}}  ,{new:true}).populate("reviews");
-     console.log(x);
+    const updateListing = await Listing.findByIdAndUpdate(id,  {$push:{reviews:{$each:[review_id]}}}  ,{new:true}).populate("reviews");
+    req.flash("regSuccess","Review Posted Succesfully");
+     console.log(updateListing);
      res.redirect(`/listings/${id}`);
 }))
 
-router.delete("/:reviewId",async(req,res,next)=>{
+//deleting review and removing the deleted review's id from listing
+router.delete("/:reviewId",asyncWrap(async(req,res,next)=>{
     let {id, reviewId} = req.params;
     const delReview = await Review.findByIdAndDelete(reviewId);
     console.log(delReview);
     const delFromArray = await Listing.findByIdAndUpdate(id, {$pull:{reviews:reviewId}});
     console.log(delFromArray);
+    req.flash("regSuccess","Review Deleted Succesfully");
     res.redirect(`/listings/${id}`);
-})
+}))
 
 export {router};
