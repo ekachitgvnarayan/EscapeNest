@@ -8,14 +8,19 @@ import ejsMate from "ejs-mate";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import flash from "connect-flash";
+import passport from "passport";
+import LocalStrategy from "passport-local";
+import {User} from "./models/user.js";
+import {isLoggedIn,configureMiddleware} from "./middleware.js";
 /* import {Listing} from "./models/listing.js";
 import {Review} from "./models/review.js";
 import {asyncWrap} from "./utils/asyncWrap.js";
 import {ListingSchema} from "./listingSchema.js";
 import {joiValidateListing, joiValidateReview} from "./utils/joiValidate.js"; */
 
-import {router as listings} from "./routes/listing.js"
-import {router as reviews} from "./routes/reviews.js"
+import {router as listingsRoute} from "./routes/listing.js";
+import {router as reviewsRoute} from "./routes/reviews.js";
+import accountRoute from "./routes/account.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -29,8 +34,8 @@ app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
 // app.set("views",path.join(__dirname,"views/listings"));
 
-
-app.use(express.urlencoded({extended:true}));
+configureMiddleware(app);
+/* app.use(express.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname,"/public")));
 app.use(cookieParser());
@@ -50,19 +55,32 @@ const sessionOptions={
 app.use(session(sessionOptions));
 app.use(flash());
 
-//flash middleware
-app.use((req,res,next)=>{
-    res.locals.regSuccess=req.flash("regSuccess");
-    res.locals.failure=req.flash("failureMsg");
-    next()
-})
+app.use(passport.initialize());
+app.use(passport.session());
+
+ */
+
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.get("/",(req,res)=>{
     res.render("listings/home.ejs");
 })
 
-app.use("/listings",listings);
-app.use("/listings/:id/reviews",reviews);
+/* app.get("/demouser",async(req,res)=>{
+    let newUser=new User({
+        email:"random@gmail.com",
+        username:"random"
+    });
+    const result = await User.register(newUser,"random123");
+    console.log(result);
+    res.send("done successfully");
+}) */
+
+app.use("/listings",listingsRoute);
+app.use("/listings/:id/reviews",reviewsRoute);
+app.use("/account",accountRoute);
 
 /* //Oops! Page Not Found
 app.use((req,res,next)=>{

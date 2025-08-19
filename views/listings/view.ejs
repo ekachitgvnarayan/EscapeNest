@@ -15,8 +15,7 @@
             <div class="card view-card">
                 <img  class="card-img show-img" src="<%=data.image%>" alt="hotel Image">
                 <div class="card-body">
-                    <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p> -->
-                    <!-- <h5 class="card-title"><%=data.title%></h5> -->
+                    <p>Owned By: <%=data.owner.username%></p>
                     <p class="card-text"><%=data.description%></p>
                     <ul>
                         <li>Price: &#x20B9;<%=data.price.toLocaleString("en-IN")%></li>

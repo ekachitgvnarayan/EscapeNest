@@ -5,6 +5,7 @@ import {asyncWrap} from "../utils/asyncWrap.js";
 import {ListingSchema} from "../listingSchema.js";
 import {joiValidateListing} from "../utils/joiValidate.js";
 import {ExpressError} from "../utils/ExpressError.js";
+import {isLoggedIn} from "../middleware.js";
 
 const router =express.Router();
 
@@ -14,12 +15,15 @@ router.get("/",asyncWrap(async(req,res,next)=>{
     res.render("listings/index.ejs",{data:response});
 }))
 
-router.get("/new",(req,res)=>{
-    res.render("listings/new.ejs");
+router.get("/new",isLoggedIn,(req,res)=>{
+        console.log("authenticated");
+        console.log(req.user);
+        res.render("listings/new.ejs");
+    
 })
 
 //Create NEW Listing
-router.post("/new",joiValidateListing,asyncWrap(async (req,res,next)=>{
+router.post("/new",joiValidateListing,isLoggedIn,asyncWrap(async (req,res,next)=>{
 //     if (req.body.image === "") {
 //     delete req.body.image; // to trigger Mongoose's default
 //   }
@@ -32,7 +36,8 @@ router.post("/new",joiValidateListing,asyncWrap(async (req,res,next)=>{
         image:data.image || "https://himkhoj.com/wp-content/uploads/2020/08/d_h-780x270.png",
         price:data.price,
         location:data.location,
-        country:data.country
+        country:data.country,
+        owner:req.user._id
     }).then((response)=>{
         req.flash("regSuccess","Listing Registered Succesfully");
     })
@@ -46,16 +51,17 @@ router.get("/:id", asyncWrap(async(req,res,next)=>{
     if(!mongoose.Types.ObjectId.isValid(id)){
         throw new ExpressError(400,"400 Bad Request");
     }
-    const response=await Listing.findById(id).populate("reviews");
+    const response=await Listing.findById(id).populate("reviews").populate("owner");
     if (!response) {
-        // req.flash("failureMsg","Listing Not Found");
+        // req.flash("error","Listing Not Found");
         throw new ExpressError(404, "Listing not found in the Database");
     }
+    console.log(response);
     res.render("listings/view.ejs",{data:response});
 }))
 
 //GET route for editing A Listing
-router.get("/edit/:id",asyncWrap(async (req,res,next)=>{
+router.get("/edit/:id",isLoggedIn,asyncWrap(async (req,res,next)=>{
     let {id}=req.params;
     await Listing.findById(id).then((response)=>{
         // console.log(response);
@@ -64,7 +70,7 @@ router.get("/edit/:id",asyncWrap(async (req,res,next)=>{
 }))
 
 //Update Route
-router.patch("/edit/:id",asyncWrap(async (req,res,next)=>{
+router.patch("/edit/:id",isLoggedIn,asyncWrap(async (req,res,next)=>{
     let {id}=req.params;
     let data=req.body;
     console.log("Printing from Patch route : req.body :- ");
@@ -83,7 +89,7 @@ router.patch("/edit/:id",asyncWrap(async (req,res,next)=>{
 }))
 
 //Delete Route
-router.delete("/:id",asyncWrap(async (req,res,next)=>{
+router.delete("/:id",isLoggedIn,asyncWrap(async (req,res,next)=>{
     let {id}=req.params;
     console.log("Printing from Delete route : deleted id:- ");
     console.log(id);

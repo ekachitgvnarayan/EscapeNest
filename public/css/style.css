@@ -40,6 +40,9 @@ footer .footer{
     color: Black;
 }
 
+h3{
+    width:auto !important;
+}
 
 .footer-icons a{
     margin: 0 8px;

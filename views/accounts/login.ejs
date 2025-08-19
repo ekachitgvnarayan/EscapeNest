@@ -1,0 +1,34 @@
+<%-layout("/layouts/boilerplate")%>
+<body>
+    
+    <div class="mt-5 row">
+        <h3 class="offset-3">Login to EscapeNest:</h3>
+        <div class="col-4 offset-4">
+            <form method="post" action="/account/login" class="needs-validation" novalidate>
+                <div class="m-3">
+                    <label for="username" class="form-label">Username:</label>
+                    <input id="username" placeholder="enter your username here..." class="form-control" 
+                        name="username" type="text" required>
+                    <!-- <div class="valid-feedback">
+                        Looks good!
+                    </div> -->
+                    <div class="invalid-feedback">
+                        Username should be valid
+                    </div>
+                </div>
+                <div class="m-3">
+                    <label for="password" class="form-label">Password:</label>
+                    <input id="password" placeholder="enter your paassword here..." class="form-control" 
+                         name="password" type="password" required>
+                    <!-- <div class="valid-feedback">
+                        Looks good!
+                    </div> -->
+                    <div class="invalid-feedback">
+                        Enter a valid password
+                    </div>
+                </div>
+                <button class="btn m-3 btn-outline newpage-button">Login</button>
+            </form>
+        </div>
+    </div>
+</body>
