@@ -5,7 +5,7 @@ import {asyncWrap} from "../utils/asyncWrap.js";
 import {ListingSchema} from "../listingSchema.js";
 import {joiValidateListing} from "../utils/joiValidate.js";
 import {ExpressError} from "../utils/ExpressError.js";
-import {isLoggedIn} from "../middleware.js";
+import {isLoggedIn,isOwner} from "../middleware.js";
 
 const router =express.Router();
 
@@ -51,12 +51,12 @@ router.get("/:id", asyncWrap(async(req,res,next)=>{
     if(!mongoose.Types.ObjectId.isValid(id)){
         throw new ExpressError(400,"400 Bad Request");
     }
-    const response=await Listing.findById(id).populate("reviews").populate("owner");
+    const response=await Listing.findById(id).populate({path:"reviews",populate:{path:"author"}}).populate("owner");
     if (!response) {
         // req.flash("error","Listing Not Found");
         throw new ExpressError(404, "Listing not found in the Database");
     }
-    console.log(response);
+    // console.log(response);
     res.render("listings/view.ejs",{data:response});
 }))
 
@@ -70,7 +70,7 @@ router.get("/edit/:id",isLoggedIn,asyncWrap(async (req,res,next)=>{
 }))
 
 //Update Route
-router.patch("/edit/:id",isLoggedIn,asyncWrap(async (req,res,next)=>{
+router.patch("/edit/:id",isLoggedIn,isOwner,asyncWrap(async (req,res,next)=>{
     let {id}=req.params;
     let data=req.body;
     console.log("Printing from Patch route : req.body :- ");
@@ -89,7 +89,7 @@ router.patch("/edit/:id",isLoggedIn,asyncWrap(async (req,res,next)=>{
 }))
 
 //Delete Route
-router.delete("/:id",isLoggedIn,asyncWrap(async (req,res,next)=>{
+router.delete("/:id",isLoggedIn,isOwner,asyncWrap(async (req,res,next)=>{
     let {id}=req.params;
     console.log("Printing from Delete route : deleted id:- ");
     console.log(id);

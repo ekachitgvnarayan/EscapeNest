@@ -22,15 +22,19 @@
                         <li>Location: <%=data.location%></li>
                         <li>Country: <%=data.country%></li>
                     </ul>
+                    <%if(currentUser){%>
+                    <%if(currentUser.username===data.owner.username){%>
                     <a class="btn btn-outline btn-sm editpage-button" href="/listings/edit/<%=data._id%>">Edit</a>
                     <form style="display:inline-block" method="post" action="/listings/<%=data._id%>?_method=DELETE">
                         <button class="btn btn-dark btn-sm">Delete</button>
                     </form>
+                    <%}%>
+                    <%}%>
                 </div>
                 <!-- <button onclick="window.location.href='/listings/edit/<%=data._id%>'">Edit</button>  -->
             </div>
         </div>
-        
+        <%if(currentUser){%>
         <div class="col-8 offset-1 mt-3 mb-3 rating-div">
             <h4 class=" mb-3">Leave a review:</h4>
             <form action="/listings/<%=data._id%>/reviews" method="post" class="needs-validation" novalidate>
@@ -50,6 +54,7 @@
                 <button class="submit-comment-button btn btn-outline mb-3">Submit</button>
             </form>
         </div>
+        <%}%>
         <div clas="col-8 offset-3 mt-3 mb-3">
             <h4 class="offset-1" >All Reviews:</h4>
             <div class="comment-section-div mb-3">
@@ -64,13 +69,14 @@
                             <p><%= review.comment%></p>
                         </blockquote>
                         <figcaption class="blockquote-footer">
-                            Posted on <cite ><%=review.createdAt.toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric',hour: '2-digit', minute: '2-digit', hour12: true })%></cite>
+                            Posted by @<%=review.author.username%> on <cite ><%=review.createdAt.toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric',hour: '2-digit', minute: '2-digit', hour12: true })%></cite>
                         </figcaption>
                         </figure>
+                        <%if(currentUser && currentUser.username===review.author.username){%>
                         <form method="post" action="/listings/<%=data._id%>/reviews/<%=review._id%>?_method=DELETE">
                             <button class="btn btn-outline-dark btn-sm">Delete</button>
                         </form>
-                        
+                        <%}%>
                     </div>
                 </div>
                 <%}%>

@@ -6,7 +6,8 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import flash from "connect-flash";
 import passport from "passport";
-
+import {Listing} from "./models/listing.js";
+import {Review} from "./models/review.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -61,4 +62,25 @@ function saveRedirectUrl(req,res,next){
     }
     return next()
 }
-export  {saveRedirectUrl,isLoggedIn,configureMiddleware};
+
+async function isOwner(req,res,next){
+    const {id}=req.params;
+    const resp =await Listing.findById(id);
+    if(!resp.owner.equals(res.locals.currentUser._id)){
+            req.flash("error","You do not have permission to edit or delete");
+            return res.redirect(`/listings/${id}`);
+        }
+        return next()
+}
+
+async function isReviewAuthor(req,res,next){
+    const {id,reviewId}=req.params;
+    const resp =await Review.findById(reviewId);
+    if(!resp.author.equals(res.locals.currentUser._id)){
+            req.flash("error","You do not have permission to delete this review");
+            return res.redirect(`/listings/${id}`);
+        }
+        return next()
+}
+
+export {isReviewAuthor,saveRedirectUrl,isLoggedIn,isOwner,configureMiddleware};
