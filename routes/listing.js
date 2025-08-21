@@ -1,104 +1,30 @@
 import express from "express";
-import mongoose from "mongoose";
-import {Listing} from "../models/listing.js";
 import {asyncWrap} from "../utils/asyncWrap.js";
-import {ListingSchema} from "../listingSchema.js";
 import {joiValidateListing} from "../utils/joiValidate.js";
-import {ExpressError} from "../utils/ExpressError.js";
 import {isLoggedIn,isOwner} from "../middleware.js";
+import ListingController from "../controllers/listings.js";
 
 const router =express.Router();
 
 //index route - DEFAULT
-router.get("/",asyncWrap(async(req,res,next)=>{
-    const response=await Listing.find({});
-    res.render("listings/index.ejs",{data:response});
-}))
+router.get("/",asyncWrap(ListingController.index));
 
-router.get("/new",isLoggedIn,(req,res)=>{
-        console.log("authenticated");
-        console.log(req.user);
-        res.render("listings/new.ejs");
-    
-})
+//New Post GET page
+router.get("/new",isLoggedIn,ListingController.renderNewForm)
 
 //Create NEW Listing
-router.post("/new",joiValidateListing,isLoggedIn,asyncWrap(async (req,res,next)=>{
-//     if (req.body.image === "") {
-//     delete req.body.image; // to trigger Mongoose's default
-//   }
-    let data = req.body;
-    console.log("Printing from post route : data=req.body :- ");
-    console.log(data);
-    await Listing.create({
-        title:data.title,
-        description:data.description,
-        image:data.image || "https://himkhoj.com/wp-content/uploads/2020/08/d_h-780x270.png",
-        price:data.price,
-        location:data.location,
-        country:data.country,
-        owner:req.user._id
-    }).then((response)=>{
-        req.flash("regSuccess","Listing Registered Succesfully");
-    })
-    res.redirect("/listings");
-}
-))
+router.post("/new",joiValidateListing,isLoggedIn,asyncWrap(ListingController.newPost))
 
 //Route to view Specific Listing based on ID
-router.get("/:id", asyncWrap(async(req,res,next)=>{
-    let {id} = req.params;
-    if(!mongoose.Types.ObjectId.isValid(id)){
-        throw new ExpressError(400,"400 Bad Request");
-    }
-    const response=await Listing.findById(id).populate({path:"reviews",populate:{path:"author"}}).populate("owner");
-    if (!response) {
-        // req.flash("error","Listing Not Found");
-        throw new ExpressError(404, "Listing not found in the Database");
-    }
-    // console.log(response);
-    res.render("listings/view.ejs",{data:response});
-}))
+router.get("/:id", asyncWrap(ListingController.showListing))
 
 //GET route for editing A Listing
-router.get("/edit/:id",isLoggedIn,asyncWrap(async (req,res,next)=>{
-    let {id}=req.params;
-    await Listing.findById(id).then((response)=>{
-        // console.log(response);
-        res.render("listings/edit.ejs",{data:response});
-    })
-}))
+router.get("/edit/:id",isLoggedIn,asyncWrap(ListingController.renderEditForm))
 
 //Update Route
-router.patch("/edit/:id",isLoggedIn,isOwner,asyncWrap(async (req,res,next)=>{
-    let {id}=req.params;
-    let data=req.body;
-    console.log("Printing from Patch route : req.body :- ");
-    console.log(data);
-    const joiValidate = ListingSchema.validate(data);
-    if(joiValidate.error){
-        throw new ExpressError(400,joiValidate.error);
-    }
-    await Listing.findByIdAndUpdate(id,data,{new:true})
-    .then((response)=>{
-        console.log("Updated Data:");
-        console.log(response);
-        req.flash("regSuccess","Listing Updated Succesfully");
-        res.redirect(`/listings/${id}`);
-    })
-}))
+router.patch("/edit/:id",isLoggedIn,isOwner,asyncWrap(ListingController.updateListing))
 
 //Delete Route
-router.delete("/:id",isLoggedIn,isOwner,asyncWrap(async (req,res,next)=>{
-    let {id}=req.params;
-    console.log("Printing from Delete route : deleted id:- ");
-    console.log(id);
-    await Listing.findByIdAndDelete(id)
-    .then((response)=>{
-        console.log(response);
-        req.flash("regSuccess","Listing Deleted Succesfully");
-        res.redirect("/listings");
-    })
-}))
+router.delete("/:id",isLoggedIn,isOwner,asyncWrap(ListingController.destroyListing))
 
 export {router};
