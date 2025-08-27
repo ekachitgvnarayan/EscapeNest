@@ -59,8 +59,8 @@ const listingSchema = new mongoose.Schema({
 
 listingSchema.post("findOneAndDelete",async (data)=>{
     const delReviews=await Review.deleteMany({_id:{$in:data.reviews}});
-    console.log("Printing from post middleware in listing.js");
-    console.log(delReviews)
+    // console.log("Printing from post middleware in listing.js");
+    // console.log(delReviews)
 })
 
 const Listing= mongoose.model("Listing",listingSchema);

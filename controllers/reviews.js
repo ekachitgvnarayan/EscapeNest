@@ -3,7 +3,7 @@ import {Review} from "../models/review.js";
 
 //function to add new review and update Listing with the review's id
 const addReview = async (req,res,next)=>{
-    console.log("working post req");
+    //console.log("working post req");
     const {id} = req.params;
     // console.log(id);
     const {review} = req.body;
@@ -13,7 +13,7 @@ const addReview = async (req,res,next)=>{
         author:req.user._id
     });
     const review_id = reviewUpdate._id;
-    console.log(reviewUpdate);
+    //console.log(reviewUpdate);
     // console.log(review_id);
     const updateListing = await Listing.findByIdAndUpdate(id,  {$push:{reviews:{$each:[review_id]}}}  ,{new:true}).populate("reviews");
     req.flash("regSuccess","Review Posted Succesfully");
@@ -25,9 +25,9 @@ const addReview = async (req,res,next)=>{
 const destroyReview = async(req,res,next)=>{
     let {id, reviewId} = req.params;
     const delReview = await Review.findByIdAndDelete(reviewId);
-    console.log(delReview);
+    //console.log(delReview);
     const delFromArray = await Listing.findByIdAndUpdate(id, {$pull:{reviews:reviewId}});
-    console.log(delFromArray);
+    //console.log(delFromArray);
     req.flash("regSuccess","Review Deleted Succesfully");
     res.redirect(`/listings/${id}`);
 }

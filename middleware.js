@@ -64,7 +64,7 @@ function isLoggedIn(req,res,next){
         req.session.redirectUrl=req.originalUrl;
         console.log("not authenticated");
         req.flash("error","Please Login to create,edit or delete a Listing");
-        console.log(req.session);
+        // console.log(req.session);
         return res.redirect("/account/login");
     }
     next();

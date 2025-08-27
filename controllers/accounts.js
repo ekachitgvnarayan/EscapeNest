@@ -31,7 +31,7 @@ const renderLoginForm = (req,res)=>{
 }
 
 const login = async (req,res)=>{
-        console.log(req.session);
+        //console.log(req.session);
         req.flash("regSuccess","Welcome to EscapeNest. You Logged in successfully");
         res.redirect(res.locals.redirectUrl || "/listings");
     }

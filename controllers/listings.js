@@ -13,8 +13,8 @@ const index = async(req,res,next)=>{
 
 // /new GET function
 const renderNewForm = (req,res)=>{
-        console.log("authenticated");
-        console.log(req.user);
+        //console.log("authenticated");
+        //console.log(req.user);
         res.render("listings/new.ejs");
     
 }
@@ -27,9 +27,9 @@ const newPost = async (req,res,next)=>{
         limit: 1
     })
   .send();
-    console.log(mbxcode.body);
-    console.log(mbxcode.body.features);
-    console.log(mbxcode.body.features[0].geometry);
+    //console.log(mbxcode.body);
+    //console.log(mbxcode.body.features);
+    //console.log(mbxcode.body.features[0].geometry);
 
     let url = "https://himkhoj.com/wp-content/uploads/2020/08/d_h-780x270.png";
     let filename="listingimage";
@@ -47,7 +47,7 @@ const newPost = async (req,res,next)=>{
         owner:req.user._id,
         geometry:mbxcode.body.features[0].geometry
     }).then((response)=>{
-        console.log(response);
+        //console.log(response);
         req.flash("regSuccess","Listing Registered Succesfully");
     })
     res.redirect("/listings");
@@ -64,7 +64,7 @@ const showListing = async(req,res,next)=>{
         // req.flash("error","Listing Not Found");
         throw new ExpressError(404, "Listing not found in the Database");
     }
-    console.log(response);
+    //console.log(response);
     res.render("listings/view.ejs",{data:response});
 }
 
@@ -83,8 +83,8 @@ const updateListing = async (req,res,next)=>{
     let filename="listingimage";
     let {id}=req.params;
     let data=req.body;
-    console.log("Printing from Patch route : req.body :- ");
-    console.log(data);
+    //console.log("Printing from Patch route : req.body :- ");
+    //console.log(data);
     const joiValidate = ListingSchema.validate(data);
     if(joiValidate.error){
         throw new ExpressError(400,joiValidate.error);
@@ -97,8 +97,8 @@ const updateListing = async (req,res,next)=>{
         listing.image={url,filename};
         await listing.save();
     };
-    console.log("Updated Data:");
-    console.log(listing);
+    //console.log("Updated Data:");
+    //console.log(listing);
     req.flash("regSuccess","Listing Updated Succesfully");
     res.redirect(`/listings/${id}`);
     
@@ -108,11 +108,11 @@ const updateListing = async (req,res,next)=>{
 
 const destroyListing = async (req,res,next)=>{
     let {id}=req.params;
-    console.log("Printing from Delete route : deleted id:- ");
-    console.log(id);
+    //.log("Printing from Delete route : deleted id:- ");
+    //console.log(id);
     await Listing.findByIdAndDelete(id)
     .then((response)=>{
-        console.log(response);
+        //console.log(response);
         req.flash("regSuccess","Listing Deleted Succesfully");
         res.redirect("/listings");
     })

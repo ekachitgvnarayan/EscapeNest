@@ -19,4 +19,4 @@ mapboxgl.accessToken = mapToken;
     const marker1 = new mapboxgl.Marker({ color: '#fe2001'})
         .setLngLat(coordinates.coordinates)
         .addTo(map);
-console.log(coordinates.coordinates)
+// console.log(coordinates.coordinates)
