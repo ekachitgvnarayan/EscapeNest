@@ -1,23 +1,70 @@
-<nav class="navbar sticky-top navbar-expand-lg  border-bottom" style="background-color: #e3f2fd;">
+<style>
+  .navbar-search-btn{
+    background-color: #fe2001;
+    color: white;
+    border-radius: 25px;
+  }
+  .navbar-search-btn:hover{
+    background-color: #fe2001;
+    color: white;
+    opacity: 0.8;
+  }
+  .navbar-search-btn i{
+    display: inline;
+    margin-right:0.3rem;
+  }
+  .navbar-search-input{
+    border-radius: 25px;
+    /* border: 1px solid black; */
+    padding:0.5rem 4rem;
+  }
+  .navbar-become-host{
+    border: 1px solid transparent;
+    border-radius: 25px;
+    padding:0.5rem 0.4rem 0.5rem 1rem !important;
+    margin-right: 1rem !important;
+  }
+  .navbar-become-host:hover{
+    border: 1px solid black;
+    padding:0.5rem 0.4rem 0.5rem 1rem !important;
+    border-radius: 25px;
+  }
+  .navbar-user-name{
+    border-radius: 25px;
+    padding:0.5rem 1rem 0.5rem 1.3rem;
+    background-color: #eaeaea;
+  }
+  .navbar-user-name i{
+    margin-right: 0.3rem !important;
+  }
+</style>
+
+
+<nav class="navbar sticky-top navbar-expand-lg  " style="background-color: #ffffff;">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/"><i class="fa-solid fa-route" style="color: #fe2001;"></i></a>
+    <a class="navbar-brand" href="/listings"><i class="fa-solid fa-route" style="color: #fe2001;"></i></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link "  href="/">Home</a>
-        <a class="nav-link" href="/listings">Listings</a>
-        <a class="nav-link" href="/listings/new">Add New Listing</a>
+        <a class="nav-link "  href="/listings">Explore</a>
       </div>
       <div class="navbar-nav ms-auto">
+        <form class="d-flex" role="search">
+          <input class="form-control me-2 navbar-search-input" type="search" placeholder="Search Destinations" aria-label="Search"/>
+          <button class="btn navbar-search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
+        </form>
+      </div>
+      <div class="navbar-nav ms-auto ">
+        <a class="nav-link navbar-become-host" href="/listings/new">Become a Host&nbsp;&nbsp;&nbsp;</a>
         <%if(currentUser){%>
-            <span class="navbar-text"><%=currentUser.username%></span>&nbsp;&nbsp;
-            <a class="nav-link" href="/account/logout">Logout</a>
+            <span class="navbar-text navbar-user-name"><i class="fa-regular fa-user"></i><b><%=currentUser.username%></b></span>&nbsp;&nbsp;
+            <a class="nav-link" href="/account/logout"><b>Logout</b></a>
           <%}%>
           <%if(!currentUser){%>
-            <a class="nav-link" href="/account/login">Login</a>
-            <a class="nav-link" href="/account/signup">Signup</a>
+            <a class="nav-link" href="/account/login"><b>Login</b></a>
+            <a class="nav-link" href="/account/signup"><b>Signup</b></a>
           <%}%>        
       </div>
     </div>

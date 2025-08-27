@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import methodOverride from "method-override";
 import cookieParser from "cookie-parser";
 import session from "express-session";
+import MongoStore from 'connect-mongo'
 import flash from "connect-flash";
 import passport from "passport";
 import {Listing} from "./models/listing.js";
@@ -18,9 +19,22 @@ const configureMiddleware = (app)=>{
     app.use(express.static(path.join(__dirname,"/public")));
     app.use(cookieParser());
 
+    //mongo store for session storage
+    const store = MongoStore.create({
+        mongoUrl: process.env.ATLASDB_URL,
+        touchAfter: 24 * 3600, // time period in seconds',
+        crypto:{
+            secret:process.env.SESSION_SECRET
+        }
+    })
+    store.on("error",function(e){
+        console.log("Session Store Error");
+        console.log(e);
+    })
     //session option for session middleware
     const sessionOptions={
-        secret:"mysecretstring",
+        store:store,
+        secret:process.env.SESSION_SECRET,
         resave:false,
         saveUninitialized:true,
         cookie:{
@@ -29,7 +43,7 @@ const configureMiddleware = (app)=>{
             httpOnly:true
         }
     }
-
+    
     app.use(session(sessionOptions));
     app.use(flash());
 

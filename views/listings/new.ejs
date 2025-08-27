@@ -1,9 +1,9 @@
 <%-layout("/layouts/boilerplate")%>
 <body>
 
-    <h3 class="m-3">Create New Listing:</h3>
+    <h3 class="m-2">Create New Listing:</h3>
         <div class="col-8 offset-2">
-            <form method="post" action="/listings/new" class="needs-validation" novalidate>
+            <form method="post" action="/listings/new" class="needs-validation" novalidate enctype="multipart/form-data">
                 <div class="m-3">
                     <label for="title" class="form-label">Title:</label>
                     <input id="title" placeholder="Enter A Catchy Title" class="form-control" name="title" type="text" required>
@@ -19,8 +19,8 @@
                     <textarea id="description" placeholder="Describe your hotel briefly..." class="form-control" name="description" type="text"></textarea>
                 </div>
                 <div class="m-3">
-                    <label for="image" class="form-label">Image Link:</label>
-                    <input  name="image" placeholder="Paste the image Link here" id="image" class="form-control"></input>
+                    <label for="imageInput" class="form-label">Choose File</label>
+                    <input name="imageInput" type="file" placeholder="Paste the image Link here" id="imageInput" accept="image/*" class="form-control"></input>
                 </div>
                 <div class="row">
                     <div class="col-md-4">

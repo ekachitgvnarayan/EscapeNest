@@ -12,11 +12,11 @@
         <h3 class="m-3">Edit the Listing:</h3>
         </div>
         <div class="col-6 offset-3">
-            <img class="m-3 img-fluid edit-img" src="<%=data.image%>" alt="hotel image">
+            <img class="m-3 img-fluid edit-img" src="<%=data.image.url%>" alt="hotel image">
         </div>
         
         <div class="col-8 offset-2">
-            <form method="post" action="/listings/edit/<%=data._id%>?_method=PATCH" class="needs-validation" novalidate>
+            <form method="post" action="/listings/edit/<%=data._id%>?_method=PATCH" class="needs-validation" enctype="multipart/form-data" novalidate>
                 <div class="m-3">
                     <label for="title" class="form-label">Title:</label>
                     <input id="title" class="form-control" name="title" value="<%=data.title%>" type="text" required>
@@ -32,8 +32,8 @@
                     </div>
                 </div>
                 <div class="m-3">
-                    <label for="image" class="form-label">Image Link:</label>
-                    <textarea rows="3" cols="90" name="image" id="image" class="form-control" required><%=data.image%></textarea>
+                    <label for="image" class="form-label">Choose File</label>
+                    <input name="image" type="file" placeholder="Paste the image Link here" id="image" accept="image/*" class="form-control"></input>
                     <div class="invalid-feedback">
                         Image link should be valid
                     </div>

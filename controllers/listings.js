@@ -2,6 +2,9 @@ import mongoose from "mongoose";
 import {Listing} from "../models/listing.js";
 import {ListingSchema} from "../listingSchema.js";
 import {ExpressError} from "../utils/ExpressError.js";
+import mbxGeocoding from "@mapbox/mapbox-sdk/services/geocoding.js";
+const mapBoxToken = process.env.MAP_TOKEN;
+const geocoder = mbxGeocoding({accessToken:mapBoxToken});
 
 const index = async(req,res,next)=>{
     const response=await Listing.find({});
@@ -18,21 +21,33 @@ const renderNewForm = (req,res)=>{
 
 // /new POST function
 const newPost = async (req,res,next)=>{
-//     if (req.body.image === "") {
-//     delete req.body.image; // to trigger Mongoose's default
-//   }
     let data = req.body;
-    console.log("Printing from post route : data=req.body :- ");
-    console.log(data);
+    const mbxcode = await geocoder.forwardGeocode({
+        query: data.location,
+        limit: 1
+    })
+  .send();
+    console.log(mbxcode.body);
+    console.log(mbxcode.body.features);
+    console.log(mbxcode.body.features[0].geometry);
+
+    let url = "https://himkhoj.com/wp-content/uploads/2020/08/d_h-780x270.png";
+    let filename="listingimage";
+    if(req.file){url=req.file.path,filename= req.file.filename};
+    // console.log("Printing from post route : data=req.body :- ");
+    // console.log(data);
+    
     await Listing.create({
         title:data.title,
         description:data.description,
-        image:data.image || "https://himkhoj.com/wp-content/uploads/2020/08/d_h-780x270.png",
+        image:{url:url, filename:filename},
         price:data.price,
         location:data.location,
         country:data.country,
-        owner:req.user._id
+        owner:req.user._id,
+        geometry:mbxcode.body.features[0].geometry
     }).then((response)=>{
+        console.log(response);
         req.flash("regSuccess","Listing Registered Succesfully");
     })
     res.redirect("/listings");
@@ -49,7 +64,7 @@ const showListing = async(req,res,next)=>{
         // req.flash("error","Listing Not Found");
         throw new ExpressError(404, "Listing not found in the Database");
     }
-    // console.log(response);
+    console.log(response);
     res.render("listings/view.ejs",{data:response});
 }
 
@@ -64,6 +79,8 @@ const renderEditForm =async (req,res,next)=>{
 
 // Function to Update Listing Patch
 const updateListing = async (req,res,next)=>{
+    let url = "https://himkhoj.com/wp-content/uploads/2020/08/d_h-780x270.png";
+    let filename="listingimage";
     let {id}=req.params;
     let data=req.body;
     console.log("Printing from Patch route : req.body :- ");
@@ -72,32 +89,32 @@ const updateListing = async (req,res,next)=>{
     if(joiValidate.error){
         throw new ExpressError(400,joiValidate.error);
     }
-    await Listing.findByIdAndUpdate(id,data,{new:true})
-    .then((response)=>{
-        console.log("Updated Data:");
-        console.log(response);
-        req.flash("regSuccess","Listing Updated Succesfully");
-        res.redirect(`/listings/${id}`);
-    })
+    let listing = await Listing.findByIdAndUpdate(id,data,{new:true});
+    
+    if(req.file){
+        url=req.file.path,
+        filename= req.file.filename;
+        listing.image={url,filename};
+        await listing.save();
+    };
+    console.log("Updated Data:");
+    console.log(listing);
+    req.flash("regSuccess","Listing Updated Succesfully");
+    res.redirect(`/listings/${id}`);
+    
 }
 
 //Function to Delete 
 
 const destroyListing = async (req,res,next)=>{
     let {id}=req.params;
-    let data=req.body;
-    console.log("Printing from Patch route : req.body :- ");
-    console.log(data);
-    const joiValidate = ListingSchema.validate(data);
-    if(joiValidate.error){
-        throw new ExpressError(400,joiValidate.error);
-    }
-    await Listing.findByIdAndUpdate(id,data,{new:true})
+    console.log("Printing from Delete route : deleted id:- ");
+    console.log(id);
+    await Listing.findByIdAndDelete(id)
     .then((response)=>{
-        console.log("Updated Data:");
         console.log(response);
-        req.flash("regSuccess","Listing Updated Succesfully");
-        res.redirect(`/listings/${id}`);
+        req.flash("regSuccess","Listing Deleted Succesfully");
+        res.redirect("/listings");
     })
 }
 

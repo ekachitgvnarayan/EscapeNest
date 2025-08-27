@@ -1,6 +1,18 @@
 import mongoose from "mongoose";
 import {Review} from "./review.js";
 
+const pointSchema = new mongoose.Schema({
+  type: {
+    type: String,
+    enum: ['Point'],
+    required: true
+  },
+  coordinates: {
+    type: [Number],
+    required: true
+  }
+});
+
 const listingSchema = new mongoose.Schema({
     title:{
         type:String,
@@ -11,7 +23,12 @@ const listingSchema = new mongoose.Schema({
         maxLength:1000
     },
     image:{
-        type:String
+        url:{
+            type:String
+        },
+        filename:{
+            type:String
+        }
     },
     price:{
         type:Number,
@@ -33,6 +50,10 @@ const listingSchema = new mongoose.Schema({
     owner:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User"
+    },
+    geometry:{
+        type:pointSchema,
+        required:true
     }
 });
 
