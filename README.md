@@ -72,7 +72,7 @@ To get a local copy up and running, follow these simple steps.
 
 1.  **Clone the repository:**
     ```sh
-    git clone [https://github.com/ekachitgvnarayan/EscapeNest.git](https://github.com/ekachitgvnarayan/EscapeNest.git)
+    git clone https://github.com/ekachitgvnarayan/EscapeNest.git
     cd EscapeNest
     ```
 
@@ -100,7 +100,14 @@ To get a local copy up and running, follow these simple steps.
     The application should now be running on `http://localhost:8000`.
 
 ---
+## ✅ Future Enhancements
 
+* Implement search and filter functionality for listings
+* Add payment gateway integration
+* Enhance responsive UI with modern CSS frameworks
+* Deploy on AWS or DigitalOcean for better scalability
+
+---
 ## 📸 Screenshots
 
 **Home Page**
@@ -111,6 +118,7 @@ To get a local copy up and running, follow these simple steps.
 
 **Create New Listing**
 ![new_listing](./docs/screenshots/create_new_listing.png)
+
 ---
 
 ## 👨‍💻 Author
